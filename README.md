@@ -72,18 +72,6 @@ Choice probabilities are derived via a softmax function with temperature τ.
 - **Free parameters:** `α` ∈ (0, 1) (learning rate), `τ` > 0 (softmax temperature)
 - **Fitting:** 2D grid search over (α, τ)
 
-#### 4. Dynamic Bayesian Learning (`08_dynamic_bayesian_model.ipynb`)
-An extension of the Bayesian Learning model where λ is not a fixed parameter but varies dynamically as a function of the agent's current prior belief, shaped by the regularized incomplete Beta function:
-
-```
-λ(prior) = th1 - betainc(α, β, prior) × th2
-```
-
-This allows the effective likelihood concentration to increase or decrease with confidence — e.g., becoming more decisive as belief strengthens (decreasing λ curve) or more exploratory (increasing λ curve). Four grid configurations are explored covering both directions and α/β dominance, with the best-fitting configuration selected per subject.
-
-- **Free parameters:** `α`, `β` (Beta shape), `th1` (start value of λ), `th2` (range/direction)
-- **Fitting:** 4-configuration grid search over (α, β) × (th1, th2)
-
 #### 3. Bayesian Learning (`04_bayesian_model.ipynb`, `05_bayesian_gradient_descent.ipynb`)
 A normative Bayesian observer that updates posterior beliefs over tank identity using a likelihood matrix parameterized by λ. Higher λ means stronger concentration of the likelihood around the "correct" fish color.
 
@@ -99,6 +87,19 @@ where I is the identity matrix (color matches dominant tank color).
 
 - **Free parameter:** `λ` ∈ (0, 1) — likelihood concentration
 - **Fitting:** Grid search (notebook 04) and gradient descent (notebook 05)
+
+- #### 4. Dynamic Bayesian Learning (`08_dynamic_bayesian_model.ipynb`)
+An extension of the Bayesian Learning model where λ is not a fixed parameter but varies dynamically as a function of the agent's current prior belief, shaped by the regularized incomplete Beta function:
+
+```
+λ(prior) = th1 - betainc(α, β, prior) × th2
+```
+
+This allows the effective likelihood concentration to increase or decrease with confidence — e.g., becoming more decisive as belief strengthens (decreasing λ curve) or more exploratory (increasing λ curve). Four grid configurations are explored covering both directions and α/β dominance, with the best-fitting configuration selected per subject.
+
+- **Free parameters:** `α`, `β` (Beta shape), `th1` (start value of λ), `th2` (range/direction)
+- **Fitting:** 4-configuration grid search over (α, β) × (th1, th2)
+
 
 ### Analysis Pipeline
 
