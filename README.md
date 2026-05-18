@@ -8,6 +8,8 @@ Computational model-based analysis of human behavior in the **Fish Tank** probab
 
 ```
 ├── fish_task/
+│   ├── figures/
+│   │   └── task_schematic.png  # Task diagram
 │   ├── notebooks/          # Analysis notebooks (run in order)
 │   │   ├── 01_data_exploration.ipynb
 │   │   ├── 02_heuristic_model.ipynb
@@ -29,6 +31,8 @@ Computational model-based analysis of human behavior in the **Fish Tank** probab
 
 ### Task Description
 
+![Fish Tank Task Schematic](fish_task/figures/task_schematic.png)
+
 Subjects observe a sequence of colored fish (Blue, Orange, or Green) drawn from one of three tanks, each with a distinct color distribution:
 
 | Tank | Blue | Orange | Green |
@@ -42,6 +46,9 @@ On each trial, subjects must predict which tank the fish was drawn from. Within 
 **Clinical groups:**
 - **BED** — Binge Eating Disorder patients
 - **HC** — Healthy Controls
+
+> **Reference:** The Fish Tank task and experimental design are described in:
+> *NeuroImage* (2021). [https://doi.org/10.1016/j.neuroimage.2021.118742](https://www.sciencedirect.com/science/article/pii/S1053811921010922)
 
 ### Cognitive Models
 
