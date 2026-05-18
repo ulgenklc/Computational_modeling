@@ -1,6 +1,6 @@
 # Computational Modeling of Decision-Making Behavior
 
-Computational model-based analysis of human behavior in two decision-making tasks: the **Fish Tank** probabilistic reversal learning task and the **Slot Machine** task. The primary clinical application is characterizing differences in learning and decision-making between individuals with **Binge Eating Disorder (BED)** and **Healthy Controls (HC)**.
+Computational model-based analysis of human behavior in the **Fish Tank** probabilistic reversal learning task. Models are applied to characterize differences in learning and decision-making between individuals with **Binge Eating Disorder (BED)** and **Healthy Controls (HC)**.
 
 ---
 
@@ -19,9 +19,6 @@ Computational model-based analysis of human behavior in two decision-making task
 │   │   └── 08_dynamic_bayesian_model.ipynb
 │   └── src/
 │       └── models.py       # Shared environment, agent, and utility functions
-├── slot_machine_task/
-│   ├── notebooks/          # Coming soon
-│   └── src/
 ├── requirements.txt
 └── .gitignore
 ```
@@ -116,12 +113,6 @@ Each model notebook follows the same structure:
 - **`gradient_alpha(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. α (RW model)
 - **`gradient_tau(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. τ (RW model)
 - **`gradient_prob(p, prob, pred, observ)`** — analytical gradient of log-likelihood w.r.t. p (Heuristic model)
-
----
-
-## Slot Machine Task
-
-*Coming soon.* This section will contain the computational modeling analysis for the slot machine probabilistic decision-making task.
 
 ---
 
