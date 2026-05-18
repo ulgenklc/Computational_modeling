@@ -197,3 +197,61 @@ class agent:
                         [1, 0, 1],
                         [1, 1, 0]])
         self.llhood = off * sigma + np.eye(3) * lmbda
+
+
+# ---------------------------------------------------------------------------
+# Analytical gradient functions for gradient-descent parameter fitting
+# ---------------------------------------------------------------------------
+
+def gradient_alpha(tau_, val, prev_val, rwrd, pred):
+    """d/d_alpha of log P(choice | values; tau) under the Rescorla-Wagner model.
+
+    Parameters
+    ----------
+    tau_     : float  — softmax temperature
+    val      : array  — current value estimates (shape 3)
+    prev_val : array  — previous value estimates (shape 3)
+    rwrd     : float  — reward received on this trial
+    pred     : int    — chosen option index
+    """
+    num = np.dot((rwrd - prev_val) / tau_, np.exp(val / tau_))
+    den = np.exp(val / tau_).sum()
+    d_den = num / den
+    d_num = (rwrd - prev_val[pred]) / tau_
+    return d_num - d_den
+
+
+def gradient_tau(tau_, val, prev_val, rwrd, pred):
+    """d/d_tau of log P(choice | values; tau) under the Rescorla-Wagner model.
+
+    Parameters
+    ----------
+    tau_     : float  — softmax temperature
+    val      : array  — current value estimates (shape 3)
+    prev_val : array  — previous value estimates (shape 3, unused but kept for API symmetry)
+    rwrd     : float  — reward received on this trial (unused but kept for API symmetry)
+    pred     : int    — chosen option index
+    """
+    num = np.dot(-val / tau_**2, np.exp(val / tau_))
+    den = np.exp(val / tau_).sum()
+    d_den = num / den
+    d_num = -val[pred] / tau_**2
+    return d_num - d_den
+
+
+def gradient_prob(p_, prob, pred, observ):
+    """d/d_p of log P(choice | prob; p) under the Heuristic model.
+
+    Parameters
+    ----------
+    p_     : float — probability increment parameter
+    prob   : array — current choice probability vector (shape 3)
+    pred   : int   — chosen option index
+    observ : int   — observed fish color index
+    """
+    if pred == observ:
+        d_num = (1 - prob[pred]) / (1 + p_)
+        d_den = 1 / (prob[pred] + p_)
+        return d_num * d_den
+    else:
+        return -1 / (1 + p_)

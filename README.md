@@ -13,9 +13,11 @@ Computational model-based analysis of human behavior in two decision-making task
 │   │   ├── 02_heuristic_model.ipynb
 │   │   ├── 03_rescorla_wagner_model.ipynb
 │   │   ├── 04_bayesian_model.ipynb
-│   │   └── 05_bayesian_gradient_descent.ipynb
+│   │   ├── 05_bayesian_gradient_descent.ipynb
+│   │   ├── 06_rescorla_wagner_gradient_descent.ipynb
+│   │   └── 07_heuristic_gradient_descent.ipynb
 │   └── src/
-│       └── models.py       # Shared fish_tank environment + agent class
+│       └── models.py       # Shared environment, agent, and gradient functions
 ├── slot_machine_task/
 │   ├── notebooks/          # Coming soon
 │   └── src/
@@ -93,10 +95,13 @@ Each model notebook follows the same structure:
 
 ### Shared Code
 
-`fish_task/src/models.py` contains the two core classes shared across all notebooks:
+`fish_task/src/models.py` contains the core classes and gradient functions shared across all notebooks:
 
 - **`fish_tank`** — environment simulator (draws fish, tracks history, manages block structure)
 - **`agent`** — cognitive agent implementing all three model policies via a unified interface
+- **`gradient_alpha(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. α (RW model)
+- **`gradient_tau(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. τ (RW model)
+- **`gradient_prob(p, prob, pred, observ)`** — analytical gradient of log-likelihood w.r.t. p (Heuristic model)
 
 ---
 
@@ -119,10 +124,12 @@ jupyter notebook
 
 ## Methods Summary
 
-| Model | Free Parameters | Fitting Method | Notebook |
-|-------|----------------|----------------|----------|
-| Heuristic | p (1 param) | Grid search | 02 |
-| Rescorla-Wagner RL | α, τ (2 params) | Grid search | 03 |
-| Bayesian Learning | λ (1 param) | Grid search | 04 |
-| Bayesian Learning | λ (1 param) | Gradient descent | 05 |
-| Model comparison | — | BIC | 01 |
+| Model | Free Parameters | Fitting Method | Data | Notebook |
+|-------|----------------|----------------|------|----------|
+| Heuristic | p (1 param) | Grid search | Real (BED/HC) | 02 |
+| Rescorla-Wagner RL | α, τ (2 params) | Grid search | Real (BED/HC) | 03 |
+| Bayesian Learning | λ (1 param) | Grid search | Real (BED/HC) | 04 |
+| Bayesian Learning | λ (1 param) | Gradient descent | Simulated | 05 |
+| Rescorla-Wagner RL | α, τ (2 params) | Gradient descent | Simulated | 06 |
+| Heuristic | p (1 param) | Gradient descent | Simulated | 07 |
+| Model comparison | — | BIC | Real (BED/HC) | 01 |
