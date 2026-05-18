@@ -88,7 +88,7 @@ where I is the identity matrix (color matches dominant tank color).
 - **Free parameter:** `λ` ∈ (0, 1) — likelihood concentration
 - **Fitting:** Grid search (notebook 04) and gradient descent (notebook 05)
 
-- #### 4. Dynamic Bayesian Learning (`08_dynamic_bayesian_model.ipynb`)
+#### 4. Dynamic Bayesian Learning (`08_dynamic_bayesian_model.ipynb`)
 An extension of the Bayesian Learning model where λ is not a fixed parameter but varies dynamically as a function of the agent's current prior belief, shaped by the regularized incomplete Beta function:
 
 ```
