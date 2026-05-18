@@ -1,0 +1,29 @@
+# Data files (not tracked — see README for data access)
+data/
+*.mat
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv
+env/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Results/outputs (large figures, serialized model fits)
+results/
+outputs/
+*.npy
