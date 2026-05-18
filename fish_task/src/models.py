@@ -1,5 +1,5 @@
 """
-Shared environment and agent models for the Fish Tank task.
+Shared environment, agent models, and utility functions for the Fish Tank task.
 
 The Fish Tank task is a probabilistic reversal learning paradigm in which
 subjects observe fish drawn from one of three tanks and must identify which
@@ -14,6 +14,7 @@ Three cognitive models are provided:
 """
 
 import numpy as np
+from scipy.special import betainc
 
 
 class fish_tank:
@@ -104,10 +105,12 @@ class agent:
             self.lmbda = kwargs['lmbda']
             self._build_likelihood(self.lmbda)
         elif self.policy == 'BL_beta':
+            # Dynamic Bayesian: λ(prior) = th1 - betainc(alpha, beta, prior) * th2
+            # Use dynamic_lambda(prior, alpha, beta, th1, th2) to compute λ at runtime.
             self.alpha = kwargs['alpha']
             self.beta = kwargs['beta']
-            self.range = kwargs['th1']
-            self.start = kwargs['th2']
+            self.range = kwargs['th1']   # start value (max λ)
+            self.start = kwargs['th2']   # range of λ variation
         else:
             raise ValueError(f"Unknown policy '{policy}'. Choose from: heuristic, RL, BL.")
 
@@ -237,6 +240,34 @@ def gradient_tau(tau_, val, prev_val, rwrd, pred):
     d_den = num / den
     d_num = -val[pred] / tau_**2
     return d_num - d_den
+
+
+def dynamic_lambda(prior, alpha, beta, th1, th2):
+    """Compute the dynamic likelihood concentration λ for the BL_beta model.
+
+    The likelihood parameter is not fixed but varies as a function of the
+    agent's current prior belief, shaped by the regularized incomplete Beta
+    function:
+
+        λ(prior) = th1 - betainc(alpha, beta, prior) * th2
+
+    Depending on the sign of th2 and the shape of the Beta CDF, λ can be
+    monotonically decreasing (th2 > 0) or increasing (th2 < 0) in the prior.
+
+    Parameters
+    ----------
+    prior : float or array  — current prior probability (in [0, 1])
+    alpha : float           — Beta distribution shape parameter α > 0
+    beta  : float           — Beta distribution shape parameter β > 0
+    th1   : float           — start (maximum) value of λ
+    th2   : float           — signed range controlling direction and magnitude
+
+    Returns
+    -------
+    float or array — dynamic λ value(s), clipped to [0, 1]
+    """
+    lmbda = th1 - betainc(alpha, beta, prior) * th2
+    return np.clip(lmbda, 0.0, 1.0)
 
 
 def gradient_prob(p_, prob, pred, observ):

@@ -15,9 +15,10 @@ Computational model-based analysis of human behavior in two decision-making task
 │   │   ├── 04_bayesian_model.ipynb
 │   │   ├── 05_bayesian_gradient_descent.ipynb
 │   │   ├── 06_rescorla_wagner_gradient_descent.ipynb
-│   │   └── 07_heuristic_gradient_descent.ipynb
+│   │   ├── 07_heuristic_gradient_descent.ipynb
+│   │   └── 08_dynamic_bayesian_model.ipynb
 │   └── src/
-│       └── models.py       # Shared environment, agent, and gradient functions
+│       └── models.py       # Shared environment, agent, and utility functions
 ├── slot_machine_task/
 │   ├── notebooks/          # Coming soon
 │   └── src/
@@ -67,6 +68,18 @@ Choice probabilities are derived via a softmax function with temperature τ.
 - **Free parameters:** `α` ∈ (0, 1) (learning rate), `τ` > 0 (softmax temperature)
 - **Fitting:** 2D grid search over (α, τ)
 
+#### 4. Dynamic Bayesian Learning (`08_dynamic_bayesian_model.ipynb`)
+An extension of the Bayesian Learning model where λ is not a fixed parameter but varies dynamically as a function of the agent's current prior belief, shaped by the regularized incomplete Beta function:
+
+```
+λ(prior) = th1 - betainc(α, β, prior) × th2
+```
+
+This allows the effective likelihood concentration to increase or decrease with confidence — e.g., becoming more decisive as belief strengthens (decreasing λ curve) or more exploratory (increasing λ curve). Four grid configurations are explored covering both directions and α/β dominance, with the best-fitting configuration selected per subject.
+
+- **Free parameters:** `α`, `β` (Beta shape), `th1` (start value of λ), `th2` (range/direction)
+- **Fitting:** 4-configuration grid search over (α, β) × (th1, th2)
+
 #### 3. Bayesian Learning (`04_bayesian_model.ipynb`, `05_bayesian_gradient_descent.ipynb`)
 A normative Bayesian observer that updates posterior beliefs over tank identity using a likelihood matrix parameterized by λ. Higher λ means stronger concentration of the likelihood around the "correct" fish color.
 
@@ -99,6 +112,7 @@ Each model notebook follows the same structure:
 
 - **`fish_tank`** — environment simulator (draws fish, tracks history, manages block structure)
 - **`agent`** — cognitive agent implementing all three model policies via a unified interface
+- **`dynamic_lambda(prior, alpha, beta, th1, th2)`** — dynamic λ(prior) via incomplete Beta function (BL_beta model)
 - **`gradient_alpha(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. α (RW model)
 - **`gradient_tau(tau, val, prev_val, rwrd, pred)`** — analytical gradient of log-likelihood w.r.t. τ (RW model)
 - **`gradient_prob(p, prob, pred, observ)`** — analytical gradient of log-likelihood w.r.t. p (Heuristic model)
@@ -132,4 +146,5 @@ jupyter notebook
 | Bayesian Learning | λ (1 param) | Gradient descent | Simulated | 05 |
 | Rescorla-Wagner RL | α, τ (2 params) | Gradient descent | Simulated | 06 |
 | Heuristic | p (1 param) | Gradient descent | Simulated | 07 |
+| Dynamic Bayesian (BL_beta) | α, β, th1, th2 (4 params) | Grid search ×4 configs | Real (BED/HC) | 08 |
 | Model comparison | — | BIC | Real (BED/HC) | 01 |
